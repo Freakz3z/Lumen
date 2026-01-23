@@ -34,7 +34,7 @@
 - 📱 **全端适配** - 完美响应式设计，PC 端宽屏展示，移动端沉浸式体验。
 - 🎵 **沉浸式音乐体验** - 升级版音乐模式，拥有独立的 **歌词滚动** 界面，支持歌词拖拽定位、高亮强调、淡入淡出动效。
 - 💬 **互动留言板** - 集成 **Giscus** 评论系统，基于 GitHub Discussions，无需后端数据库，安全稳定。
-- ✨ **动态特效** - 优雅的 Canvas 粒子背景连线动画，提升视觉质感。
+- ✨ **动态特效** - 全新升级的 **Sakura 樱花飘落** 动态背景（Canvas 绘制），支持物理模拟飘落、摆动和旋转效果。
 - 🔗 **社交聚合** - 智能解析 QQ、Email、Telegram 等社交链接，一键直达。
 - 🌤 **实时天气** - 自动定位并展示实时气象信息（基于和风天气/MXNZP API）。
 - ⏳ **时光胶囊** - 可视化展示今日、本周、本月、今年的“时间进度”，提醒珍惜当下。
@@ -57,12 +57,33 @@ npm install
 npm run dev
 ```
 
-### 3. 生产环境构建
+### 3. 代码格式化与规范
+```bash
+# 检查代码格式
+npm run lint
+
+# 自动修复格式问题
+npm run format
+```
+
+### 4. 生产环境构建
 ```bash
 npm run build
 ```
 
 构建产物位于 `dist` 目录，可直接部署到任何静态服务器。
+
+## 📂 项目结构 | Project Structure
+
+```
+src/
+├── assets/             # 静态资源 (css, img, fonts)
+├── components/         # UI 组件 (Background, MusicPlayer, etc.)
+├── composables/        # 组合式函数 (useTime, useWeather) - 核心逻辑复用
+├── App.vue             # 主应用入口
+└── main.js             # Vue 初始化
+```
+
 
 ## ⚙️ 配置说明 | Configuration
 
@@ -74,6 +95,7 @@ npm run build
     "title": "网站标题",
     "description": "Meta描述",
     "author": "你的名字",
+    "background_animation": true,   // 是否开启樱花背景特效
     "logo_img": "./assets/img/icon/avatar.jpg",
     
     // 社交链接配置 (自动显示图标)

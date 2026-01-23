@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <Background />
+    <Background v-if="config.background_animation !== false" />
     <section
       id="section"
       class="section"
@@ -62,14 +62,14 @@
                     <i class="fa-solid fa-quote-left"></i>
                     <div class="des-title">
                         <TransitionGroup name="list" tag="div" style="position:relative; width:100%; height: 5rem; overflow:hidden;">
-                            <div v-for="item in messageList" :key="item.id" class="message-item" style="width:100%; line-height: 2.5rem;">
+                            <div v-for="item in messageList" :key="item.id" class="message-item" style="width:100%; height: 2.5rem; line-height: 2.5rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                 <span v-html="item.text"></span>
                             </div>
                             <!-- Fallback/Default when no list (not playing or init) -->
-                            <div v-if="messageList.length === 0" key="default-title" class="message-item">
+                            <div v-if="messageList.length === 0" key="default-title" class="message-item" style="height: 2.5rem; line-height: 2.5rem;">
                                 <span v-html="messageTitle"></span>
                             </div>
-                            <div v-if="messageList.length === 0" key="default-text" class="message-item">
+                            <div v-if="messageList.length === 0" key="default-text" class="message-item" style="height: 2.5rem; line-height: 2.5rem;">
                                 <span v-html="messageText"></span>
                             </div>
                         </TransitionGroup>
@@ -375,9 +375,15 @@
                                     <i class="fa-brands fa-github"></i>
                                 </a>
                             </div>
-                             <p>每一天，都值得被记录</p>
-                             <p>每一刻，都值得去珍惜</p>
-                             <p>希望你今天也开心</p>
+                             <p>{{ t('record_day') }}</p>
+                             <p>{{ t('cherish_moment') }}</p>
+                             <p>{{ t('hope_happy') }}</p>
+                             
+                             <div class="lang-switch" style="margin-top: 1rem; cursor: pointer; font-size: 0.9rem; opacity: 0.8;">
+                                 <span @click="locale = 'zh'" :style="{ fontWeight: locale === 'zh' ? 'bold' : 'normal' }">CN</span>
+                                 &nbsp;|&nbsp;
+                                 <span @click="locale = 'en'" :style="{ fontWeight: locale === 'en' ? 'bold' : 'normal' }">EN</span>
+                             </div>
                         </div>
 
                          <!-- Lyrics Flow -->
@@ -436,21 +442,27 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, onUnmounted, computed } from "vue";
+import { ref, reactive, onMounted, onUnmounted, computed, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import iziToast from "izitoast";
 import MessageBoard from "./components/MessageBoard.vue";
 import Background from "./components/Background.vue";
 import MusicPlayer from "./components/MusicPlayer.vue";
 import configData from "../setting.json";
+import { useTime } from "./composables/useTime";
+import { useWeather } from "./composables/useWeather";
 
 // Config & State
+const { t, locale } = useI18n();
 const config = reactive(configData);
 const isLoading = ref(true);
-const loadingText = ref("加载中");
+const loadingState = ref(0);
+const loadingText = computed(() => loadingState.value === 0 ? t('loading') : t('font_tip'));
 const showMore = ref(false);
 const showBox = ref(false);
 const showMessageBoard = ref(false);
-const showMusic = ref(false);
+const showMusic = ref(localStorage.getItem('music_open') === 'true');
+watch(showMusic, (val) => localStorage.setItem('music_open', val));
 const isHitokotoHover = ref(false);
 const wallpaperType = ref("1");
 const aplayerContainer = ref(null);
@@ -459,6 +471,11 @@ const currentLrc = ref("");
 const musicProgress = ref(0);
 const isSeeking = ref(false);
 const musicPlayerRef = ref(null);
+
+// Composables
+const { timeData, capsule } = useTime();
+const { weather, updateWeather } = useWeather();
+
 
 // Lyrics Scrolling Logic
 const fullLrcList = ref([]);
@@ -540,14 +557,7 @@ const resolveAsset = (path) => {
   return path;
 };
 
-// Weather
-const weather = reactive({
-  city: "天气",
-  text: "加载失败",
-  temp: "",
-  windDir: "次数",
-  windScale: "超限",
-});
+// Weather (Moved to composable)
 
 // Hitokoto
 const hitokoto = reactive({
@@ -555,44 +565,20 @@ const hitokoto = reactive({
   from: "Freakk",
 });
 
-// Time
-const timeData = reactive({
-  year: 0,
-  month: 0,
-  day: 0,
-  weekday: "星期一",
-  timeText: "00:00:00",
-});
+// Time & Capsule (Moved to composable)
 
-// Capsule
-const capsule = reactive({
-    dayPass: 0,
-    dayPercent: 0,
-    weekDay: 0,
-    weekPercent: 0,
-    monthDay: 0,
-    monthPercent: 0,
-    yearMonth: 0,
-    yearPercent: 0
-})
 
 const switchMore = () => {
     // Legacy function placeholder, replaced by handleSwitchMore
 }
 // Add reactive state for the message card
-const messageTitle = ref("Hello&nbsp;World&nbsp;!");
-const messageText = ref("一个建立于 21 世纪的小站，存活于互联网的边缘");
+const messageTitle = computed(() => showMore.value ? t('oops') : t('hello_world'));
+const messageText = computed(() => showMore.value ? t('oops_desc') : t('site_desc'));
 
 // Update switchMore to toggle text
 const handleSwitchMore = () => {
     showMore.value = !showMore.value;
-    if (showMore.value) {
-        messageTitle.value = "Oops&nbsp;!";
-        messageText.value = "哎呀，这都被你发现了（ 再点击一次可关闭 ）";
-    } else {
-        messageTitle.value = "Hello&nbsp;World&nbsp;!";
-        messageText.value = "一个建立于 21 世纪的小站，存活于互联网的边缘";
-    }
+    // Computed props handle text updates automatically now
 }
 
 const nextLrc = ref("");
@@ -612,102 +598,6 @@ const getHitokoto = () => {
     .catch(console.error);
 };
 
-const updateTime = () => {
-    const dt = new Date();
-    timeData.year = dt.getFullYear();
-    timeData.month = dt.getMonth() + 1;
-    timeData.day = dt.getDate();
-    const weeks = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
-    timeData.weekday = weeks[dt.getDay()];
-    
-    const h = dt.getHours().toString().padStart(2, '0');
-    const m = dt.getMinutes().toString().padStart(2, '0');
-    const s = dt.getSeconds().toString().padStart(2, '0');
-    timeData.timeText = `${h}:${m}:${s}`;
-}
-
-const updateWeather = (showToast = false) => {
-    // iziToast default settings (top center)
-    iziToast.settings({
-        timeout: 3000, 
-        progressBar: false, // Hide progress bar
-        position: 'topCenter',
-        transitionIn: 'fadeInDown',
-    });
-
-    // Hardcoded keys from original
-  const add_id = "vcpmlmqiqnjpxwq1";
-  const app_secret = "PeYnsesgkmK7qREhIFppIcsoN0ZShv3c";
-  const key = "691d007d585841c09e9b41e79853ecc2";
-  
-  fetch(`https://www.mxnzp.com/api/ip/self?app_id=${add_id}&app_secret=${app_secret}`)
-    .then(res => res.json())
-    .then(data => {
-        if(data.data && data.data.city) {
-            let str = data.data.city;
-            let city = str.replace(/市/g, "");
-            weather.city = city;
-            
-             fetch(`https://geoapi.qweather.com/v2/city/lookup?location=${city}&number=1&key=${key}`)
-                .then(res => res.json())
-                .then(location => {
-                    if(location.location && location.location.length > 0) {
-                        let id = location.location[0].id;
-                        fetch(`https://devapi.qweather.com/v7/weather/now?location=${id}&key=${key}`)
-                            .then(res => res.json())
-                            .then(wData => {
-                                if(wData.now) {
-                                    weather.text = wData.now.text;
-                                    weather.temp = wData.now.temp;
-                                    weather.windDir = wData.now.windDir;
-                                    weather.windScale = wData.now.windScale;
-                                    
-                                    if(showToast) {
-                                        iziToast.show({
-                                            timeout: 2000,
-                                            icon: "fa-solid fa-cloud-sun",
-                                            message: '实时天气已更新'
-                                        });
-                                    }
-                                }
-                            })
-                    }
-                })
-        }
-    })
-    .catch(console.error);
-};
-
-
-const updateCapsule = () => {
-    // Logic from time.js
-    let nowDate = +new Date();
-    let todayStartDate = new Date(new Date().toLocaleDateString()).getTime();
-    let todayPassHours = (nowDate - todayStartDate) / 1000 / 60 / 60;
-    let todayPassHoursPercent = (todayPassHours / 24) * 100;
-    
-    capsule.dayPass = parseInt(todayPassHours);
-    capsule.dayPercent = parseInt(todayPassHoursPercent);
-    
-    let weeks = { 0: 7, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6 };
-    let weekDay = weeks[new Date().getDay()];
-    let weekDayPassPercent = (weekDay / 7) * 100;
-    capsule.weekDay = weekDay;
-    capsule.weekPercent = parseInt(weekDayPassPercent);
-    
-    let year = new Date().getFullYear();
-    let date = new Date().getDate();
-    let month = new Date().getMonth() + 1;
-    let monthAll = new Date(year, month, 0).getDate();
-    let monthPassPercent = (date / monthAll) * 100;
-    
-    capsule.monthDay = date;
-    capsule.monthPercent = parseInt(monthPassPercent);
-    
-    let yearPass = (month / 12) * 100;
-    capsule.yearMonth = month;
-    capsule.yearPercent = parseInt(yearPass);
-}
 
 // Functions for Box
 const openBox = () => {
@@ -726,9 +616,13 @@ const updateLyrics = (lrc, next) => {
     // Basic de-bounce: if exact same text, ignore
     if (lastLrcText.value === lrc) return;
     lastLrcText.value = lrc;
+    
+    // Normalize logic
+    const safeLrc = lrc.trim();
+    const safeNext = next ? next.trim() : "";
 
     // Current lrc and next lrc
-    currentLrc.value = `<span class='lrc-show'><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='18' height='18'><path fill='none' d='M0 0h24v24H0z'/><path d='M12 13.535V3h8v3h-6v11a4 4 0 1 1-2-3.465z' fill='rgba(255,255,255,1)'/></svg>&nbsp;${lrc}&nbsp;<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='18' height='18'><path fill='none' d='M0 0h24v24H0z'/><path d='M12 13.535V3h8v3h-6v11a4 4 0 1 1-2-3.465z' fill='rgba(255,255,255,1)'/></svg></span>`;
+    currentLrc.value = `<span class='lrc-show'><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='18' height='18'><path fill='none' d='M0 0h24v24H0z'/><path d='M12 13.535V3h8v3h-6v11a4 4 0 1 1-2-3.465z' fill='rgba(255,255,255,1)'/></svg>&nbsp;${safeLrc}&nbsp;<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='18' height='18'><path fill='none' d='M0 0h24v24H0z'/><path d='M12 13.535V3h8v3h-6v11a4 4 0 1 1-2-3.465z' fill='rgba(255,255,255,1)'/></svg></span>`;
     
     // Update message card logic with list for TransitionGroup
     if(playingLrc.value) {
@@ -749,7 +643,8 @@ const updateLyrics = (lrc, next) => {
         let newItemB = null;
         if(messageList.value.length >= 2) {
              const oldB = messageList.value[1];
-             if(oldB.text === lrc) {
+             // Compare with trimmed
+             if(oldB.text === safeLrc) {
                  newItemB = oldB;
              }
         }
@@ -757,14 +652,14 @@ const updateLyrics = (lrc, next) => {
         if(!newItemB) {
             // First run or jump
              messageList.value = [
-                 { text: lrc, id: msgCounter++ },
-                 { text: next, id: msgCounter++ }
+                 { text: safeLrc, id: msgCounter++ },
+                 { text: safeNext, id: msgCounter++ }
              ];
         } else {
              // Shift
              messageList.value = [
                  newItemB,
-                 { text: next, id: msgCounter++ }
+                 { text: safeNext, id: msgCounter++ }
              ];
         }
     }
@@ -781,8 +676,8 @@ const handlePause = () => {
     // Clear message list to show default text
     messageList.value = [];
     // Restore Hello World
-    messageTitle.value = "Hello&nbsp;World&nbsp;!";
-    messageText.value = "一个建立于 21 世纪的小站，存活于互联网的边缘";
+    // handled by computed
+    showMore.value = false;
 }
 
 
@@ -812,7 +707,6 @@ const setBg = (type) => {
 }
 
 // Watch for changes if needed, but since we init, we can just call setBg for initial load
-import { watch } from 'vue';
 watch(wallpaperType, (newVal) => {
     setBg(newVal);
 });
@@ -850,14 +744,8 @@ onMounted(() => {
 
   // Init
   getHitokoto();
-  updateWeather(); // Initial fetch
   
-  // Timers
-  updateTime();
-  timeInterval = setInterval(updateTime, 1000);
-  
-  updateCapsule();
-  capsuleInterval = setInterval(updateCapsule, 1000);
+  // Note: time and weather are handled by useTime() and useWeather() composables
 
   // Loading Fake Delay
   setTimeout(() => {
@@ -866,20 +754,20 @@ onMounted(() => {
         iziToast.show({
             timeout: 2500,
             icon: false,
-            title: "Hello",
-            message: '欢迎来到我的主页'
+            title: t('welcome_title'),
+            message: t('welcome_msg')
         });
     }, 800)
   }, 800);
   
   setTimeout(() => {
-      loadingText.value = "字体及文件加载可能需要一定时间";
+    // loadingText logic
+    loadingState.value = 1;
   }, 3000);
 });
 
 onUnmounted(() => {
-    clearInterval(timeInterval);
-    clearInterval(capsuleInterval);
+    // Intervals cleared in composables
 })
 </script>
 

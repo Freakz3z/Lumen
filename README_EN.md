@@ -29,6 +29,7 @@ It integrates a music player, real-time weather, a "Time Capsule", dynamic wallp
 - 📱 **Fully Responsive** - Perfect display across PC, tablets, and mobile (Immersive full-screen experience on mobile).
 - 🎵 **Immersive Music Experience** - Redesigned music interface with **Visual Rolling Lyrics**, supporting active highlighting, smooth scrolling, and fade effects.
 - 💬 **Message Board** - Integrated **Giscus** comment system, secure and database-free.
+- ✨ **Dynamic Effects** - Upgraded **Sakura Falling** background animation (Canvas based), featuring physics-simulated swaying and rotation.
 - 🔗 **Social Aggregation** - Smart parsing for QQ, Email, Telegram, and other social links.
 - 🌤 **Real-time Weather** - Automatic location detection and weather display via QWeather/MXNZP APIs.
 - ⏳ **Time Capsule** - Visualizes the progress of the day, week, month, and year to remind you to cherish time.
@@ -56,18 +57,24 @@ npm run dev
 npm run build
 ```
 
+### Linting & Formatting
+```bash
+# Check for issues
+npm run lint
+
+# Auto-fix formatting
+npm run format
+```
+
 ## 📂 Folder Structure
 
 ```
 src/
 ├── assets/          # Static assets (css, img, fonts, icons)
-│   ├── css/         # Global styles, animations, mobile adapters
-│   └── img/         # Backgrounds, icons
-├── components/      # Vue Components
-│   └── MusicPlayer.vue  # APlayer wrapper component
-├── App.vue          # Main App Logic (Layout, State, Interactions)
-├── main.js          # Entry point
-└── setting.json     # Configuration file
+├── components/      # UI Components (Background, MusicPlayer)
+├── composables/     # Composition API Hooks (useTime, useWeather) - Reusable Logic
+├── App.vue          # Main App Logic
+└── main.js          # Entry point
 ```
 
 ## ⚙️ Configuration

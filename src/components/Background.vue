@@ -10,74 +10,86 @@ import { onMounted, onUnmounted, ref } from 'vue';
 const canvas = ref(null);
 let ctx = null;
 let animationFrameId = null;
-let particles = [];
+let sakuras = [];
 
-// Configuration
+// Configuration for Sakura
 const config = {
-  particleColor: 'rgba(255, 255, 255, 0.7)',
-  lineColor: 'rgba(255, 255, 255, 0.2)',
-  particleAmount: 60,
-  defaultSpeed: 0.5,
-  variantSpeed: 0.5,
-  defaultRadius: 2,
-  variantRadius: 2,
-  linkRadius: 150,
+  amount: 40,
+  colors: [
+      'rgba(255, 183, 197, 0.9)', 
+      'rgba(255, 192, 203, 0.9)', 
+      'rgba(255, 209, 220, 0.9)',
+      'rgba(248, 24, 148, 0.3)' 
+  ]
 };
 
 // Check mobile
 const isMobile = window.innerWidth < 768;
 if (isMobile) {
-    config.particleAmount = 25;
+    config.amount = 20;
 }
 
-class Particle {
-  constructor(w, h) {
-    this.x = Math.random() * w;
-    this.y = Math.random() * h;
-    this.speed = config.defaultSpeed + Math.random() * config.variantSpeed;
-    this.directionAngle = Math.floor(Math.random() * 360);
-    this.color = config.particleColor;
-    this.radius = config.defaultRadius + Math.random() * config.variantRadius;
-    this.vector = {
-      x: Math.cos(this.directionAngle) * this.speed,
-      y: Math.sin(this.directionAngle) * this.speed
-    };
-  }
-
-  update(w, h) {
-    this.border(w, h);
-    this.x += this.vector.x;
-    this.y += this.vector.y;
-  }
-
-  border(w, h) {
-    if (this.x >= w || this.x <= 0) {
-      this.vector.x *= -1;
+class Sakura {
+    constructor(w, h) {
+        this.w = w;
+        this.h = h;
+        this.reset(true);
     }
-    if (this.y >= h || this.y <= 0) {
-      this.vector.y *= -1;
+    
+    reset(initial = false) {
+        this.x = Math.random() * this.w;
+        this.y = initial ? Math.random() * this.h : -20;
+        this.size = Math.random() * 6 + 6; // 6-12px
+        this.speedX = Math.random() * 0.5 - 0.25; 
+        this.speedY = Math.random() * 1.5 + 1; 
+        this.rotation = Math.random() * Math.PI * 2;
+        this.rotationSpeed = Math.random() * 0.03 - 0.015;
+        this.color = config.colors[Math.floor(Math.random() * config.colors.length)];
+        
+        // Sway
+        this.sway = Math.random() * Math.PI * 2;
+        this.swaySpeed = Math.random() * 0.02 + 0.01;
     }
-    if (this.x > w) this.x = w;
-    if (this.y > h) this.y = h;
-    if (this.x < 0) this.x = 0;
-    if (this.y < 0) this.y = 0;
-  }
-
-  draw(context) {
-    context.beginPath();
-    context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    context.closePath();
-    context.fillStyle = this.color;
-    context.fill();
-  }
+    
+    update() {
+        this.x += this.speedX + Math.sin(this.sway) * 0.6;
+        this.y += this.speedY;
+        this.rotation += this.rotationSpeed;
+        this.sway += this.swaySpeed;
+        
+        // Reset if out of bounds
+        if (this.y > this.h + 20 || this.x > this.w + 20 || this.x < -20) {
+            this.reset();
+        }
+    }
+    
+    draw(ctx) {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation);
+        
+        ctx.fillStyle = this.color;
+        
+        // Draw Petal Shape
+        ctx.beginPath();
+        const s = this.size;
+        ctx.moveTo(0, 0); 
+        // Left curve
+        ctx.bezierCurveTo(-s/2, -s/2, -s, -s*1.5, 0, -s);
+        // Right curve
+        ctx.bezierCurveTo(s, -s*1.5, s/2, -s/2, 0, 0);
+        
+        ctx.fill();
+        ctx.restore();
+    }
 }
 
 const init = () => {
     if(!canvas.value) return;
     resize();
-    particles = [];
-    for (let i = 0; i < config.particleAmount; i++) {
-        particles.push(new Particle(canvas.value.width, canvas.value.height));
+    sakuras = [];
+    for (let i = 0; i < config.amount; i++) {
+        sakuras.push(new Sakura(canvas.value.width, canvas.value.height));
     }
     animate();
 };
@@ -92,26 +104,9 @@ const draw = () => {
     if(!ctx || !canvas.value) return;
     ctx.clearRect(0, 0, canvas.value.width, canvas.value.height);
     
-    for (let i = 0; i < particles.length; i++) {
-        particles[i].update(canvas.value.width, canvas.value.height);
-        particles[i].draw(ctx);
-        
-        // Draw connections
-        for (let j = i; j < particles.length; j++) {
-            let distance = Math.sqrt(
-                Math.pow((particles[i].x - particles[j].x), 2) + 
-                Math.pow((particles[i].y - particles[j].y), 2)
-            );
-            if (distance < config.linkRadius) {
-                ctx.beginPath();
-                ctx.strokeStyle = config.lineColor;
-                ctx.lineWidth = 0.5;
-                ctx.moveTo(particles[i].x, particles[i].y);
-                ctx.lineTo(particles[j].x, particles[j].y);
-                ctx.stroke();
-                ctx.closePath();
-            }
-        }
+    for (let i = 0; i < sakuras.length; i++) {
+        sakuras[i].update();
+        sakuras[i].draw(ctx);
     }
 };
 
@@ -141,7 +136,7 @@ onUnmounted(() => {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1; /* Above background image (-2 maybe?), below content */
+    z-index: 1;
     pointer-events: none;
 }
 </style>

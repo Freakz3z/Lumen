@@ -3,6 +3,7 @@
     "description": "一个默默无闻的主页",
     "keywords": "Freakk,个人主页",
     "author": "Freakk",
+    "background_animation": true,
     "logo_img": "./assets/img/icon/avatar.jpg",
     "logo_text_1": "Freakk",
     "logo_text_2": "",

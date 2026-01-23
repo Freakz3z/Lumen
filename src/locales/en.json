@@ -1,0 +1,20 @@
+{
+    "loading": "Loading",
+    "welcome_title": "Hello",
+    "welcome_msg": "Welcome to my homepage",
+    "font_tip": "Fonts and files may take some time to load",
+    "music_list": "Playlist",
+    "back_hitokoto": "Back to Hitokoto",
+    "music_loading": "Loading...",
+    "music_fail": "Load Failed",
+    "music_load_fail": "Music Load Failed",
+    "weather_updated": "Weather Updated",
+    "hello_world": "Hello&nbsp;World&nbsp;!",
+    "site_desc": "A small site built in the 21st century, living on the edge of the internet",
+    "oops": "Oops&nbsp;!",
+    "oops_desc": "Ah, you found this (Click again to close)",
+    "copyright": "Copyright",
+    "record_day": "Every day is worth recording",
+    "cherish_moment": "Every moment is worth cherishing",
+    "hope_happy": "Hope you are happy today"
+}

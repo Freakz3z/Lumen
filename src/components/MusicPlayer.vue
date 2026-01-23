@@ -2,8 +2,8 @@
   <div class="music" v-show="show">
     <div class="music-all" @mouseenter="isHovering = true" @mouseleave="isHovering = false">
       <div class="music-button">
-        <div id="music-open" @click="openList">音乐列表</div>
-        <div id="music-close" @click="$emit('close')">回到一言</div>
+        <div id="music-open" @click="openList">{{ t('music_list') }}</div>
+        <div id="music-close" @click="$emit('close')">{{ t('back_hitokoto') }}</div>
       </div>
       <div class="music-control">
         <i class="fa-solid fa-backward-step" id="last" @click="skipBack"></i>
@@ -38,9 +38,12 @@
 
 <script setup>
 import { ref, onMounted, computed, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import APlayer from "aplayer";
 import iziToast from "izitoast";
 import config from "../../setting.json";
+
+const { t } = useI18n();
 
 const props = defineProps({
   show: Boolean,
@@ -49,11 +52,16 @@ const props = defineProps({
 const emit = defineEmits(["close", "open-box", "update-lyrics", "play", "pause", "update-progress", "load-lrc", "time-update"]);
 
 const isPlaying = ref(false);
-const currentMusicName = ref("未播放音乐");
+const currentMusicName = ref(t('music_loading'));
 const isHovering = ref(false);
-const volume = ref(0.5);
+const volume = ref(Number(localStorage.getItem('music_volume')) || 0.5);
 const ap = ref(null);
 const aplayerRef = ref(null);
+
+watch(volume, (val) => {
+    localStorage.setItem('music_volume', val);
+});
+
 
 const parseLrc = (lrc) => {
     if (!lrc) return [];
@@ -142,7 +150,7 @@ onMounted(() => {
                 emit('load-lrc', parsed);
             }
         } catch (e) {
-            currentMusicName.value = "加载中...";
+            currentMusicName.value = t('music_loading');
         }
         emit('play');
       });
@@ -179,7 +187,7 @@ onMounted(() => {
 
       ap.value.on("error", () => {
           console.error("APlayer error");
-          currentMusicName.value = "加载失败";
+          currentMusicName.value = t('music_fail');
       });
 
       // Lyrics sync
@@ -199,7 +207,7 @@ onMounted(() => {
                    const nextLrcEl = currentLrc.nextElementSibling;
                    const nextText = nextLrcEl ? nextLrcEl.innerText : "PLAYING...";
                    
-                   emit('update-lyrics', currentLrc.innerText, nextText);
+                   emit('update-lyrics', currentLrc.innerText.trim(), nextText.trim());
               }
           }
       });
@@ -212,7 +220,7 @@ onMounted(() => {
         iziToast.show({
             timeout: 2000,
             icon: "fa-solid fa-circle-exclamation",
-            message: '音乐加载失败'
+            message: t('music_load_fail')
         });
     });
 });
