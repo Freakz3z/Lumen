@@ -1,0 +1,41 @@
+{
+    "title": "Freakkの主页",
+    "description": "一个默默无闻的主页",
+    "keywords": "Freakk,个人主页",
+    "author": "Freakk",
+    "logo_img": "./assets/img/icon/avatar.jpg",
+    "logo_text_1": "Freakk",
+    "logo_text_2": "love",
+    "github": "Freakz3z",
+    "link_1": [
+        "https://freakk.love/",
+        "fa-solid fa-blog",
+        "博客"
+    ],
+    "link_2": [
+        "https://github-wrapped4u.vercel.app/",
+        "fa-solid fa-cloud",
+        "GitHub统计"
+    ],
+    "link_3": [
+        "https://vusic.7dd62289.er.aliyun-esa.net/",
+        "fa-solid fa-music",
+        "音乐可视化"
+    ],
+    "link_4": [
+        "https://muse.7dd62289.er.aliyun-esa.net/",
+        "fa-solid fa-book-bookmark",
+        "英语助手"
+    ],
+    "link_5": [
+        "https://freakk.love/",
+        "fa-solid fa-flask",
+        "开发中..."
+    ],
+    "link_6": [
+        "https://freakk.love/",
+        "fa-solid fa-flask",
+        "敬请期待..."
+    ],
+    "Copyright_text": "Freakk"
+}
