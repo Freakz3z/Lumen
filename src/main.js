@@ -11,6 +11,7 @@ import './assets/css/style.css'
 import './assets/css/mobile.css'
 import './assets/css/loading.css'
 import './assets/css/animation.css'
+import './assets/css/extra.css'
 
 const app = createApp(App);
 app.use(i18n);

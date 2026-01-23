@@ -1,0 +1,66 @@
+
+/* Typewriter Effect Styles */
+.typed-cursor {
+    opacity: 1;
+    animation: typedjsBlink 0.7s infinite;
+    -webkit-animation: typedjsBlink 0.7s infinite;
+    animation: typedjsBlink 0.7s infinite;
+}
+@keyframes typedjsBlink{
+    50% { opacity: 0.0; }
+}
+@-webkit-keyframes typedjsBlink{
+    0% { opacity: 1; }
+    50% { opacity: 0.0; }
+    100% { opacity: 1; }
+}
+.identity-box {
+    text-align: left;
+    margin-top: 0px;
+    height: 1.5rem; /* Reserve space */
+    font-size: 1rem;
+    font-family: 'Pacifico-Regular', sans-serif;
+    color: #efefef;
+    text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    padding-left: 0.5rem;
+    position: relative;
+    z-index: 10;
+    width: 100%;
+}
+
+/* Glassmorphism for iziToast */
+.iziToast-glass {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15) !important;
+    border-radius: 12px !important;
+    color: #fff !important;
+}
+.iziToast-glass .iziToast-title {
+    color: #fff !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+.iziToast-glass .iziToast-message {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+.iziToast-glass .iziToast-icon {
+    color: #fff !important;
+}
+.iziToast-glass .iziToast-close {
+    color: #fff !important;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.5));
+}
+.iziToast-glass .iziToast-progressbar {
+    background: rgba(255, 255, 255, 0.4) !important;
+}
+.iziToast-glass .iziToast-capsule {
+    background: transparent !important;
+}
+
+/* Move avatar up */
+.main-img {
+    margin-top: -2rem !important; /* Adjust based on original pos */
+    transition: margin 0.5s;
+}

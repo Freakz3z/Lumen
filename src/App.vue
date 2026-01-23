@@ -54,6 +54,10 @@
                     <span class="img-text" id="logo-text-2"
                       >.{{ config.logo_text_2 }}</span
                     >
+                    <!-- Typewriter -->
+                    <div class="identity-box">
+                      <span id="typed-output"></span>
+                    </div>
                   </div>
                 </div>
                 <!--介绍信息-->
@@ -154,7 +158,7 @@
                       class="hitokoto cards"
                       id="hitokoto"
                       v-show="!showMusic"
-                      @click="getHitokoto"
+                      @click="getHitokoto(true)"
                       @mouseenter="isHitokotoHover = true"
                       @mouseleave="isHitokotoHover = false"
                     >
@@ -442,9 +446,10 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, onUnmounted, computed, watch } from "vue";
+import { ref, reactive, onMounted, onUnmounted, computed, watch, nextTick } from "vue";
 import { useI18n } from "vue-i18n";
 import iziToast from "izitoast";
+import Typed from "typed.js";
 import MessageBoard from "./components/MessageBoard.vue";
 import Background from "./components/Background.vue";
 import MusicPlayer from "./components/MusicPlayer.vue";
@@ -588,14 +593,46 @@ const handleBgError = (e) => {
     e.target.classList.add('error');
 };
 
-const getHitokoto = () => {
+let lastHitokotoTime = 0;
+const getHitokoto = (showToast = false) => {
+  const now = Date.now();
+  if (showToast && now - lastHitokotoTime < 2000) {
+      iziToast.show({
+          message: "你点的太快了",
+          icon: "fa-solid fa-triangle-exclamation"
+      });
+      return;
+  }
+  if (showToast) lastHitokotoTime = now;
+  
+  if (showToast) {
+      iziToast.show({
+          message: "一言正在更新",
+          icon: "fa-solid fa-arrows-rotate fa-spin",
+          timeout: 2000
+      });
+  }
+
   fetch("https://v1.hitokoto.cn?max_length=24")
     .then((res) => res.json())
     .then((data) => {
       hitokoto.text = data.hitokoto;
       hitokoto.from = data.from;
+      if (showToast) {
+          iziToast.show({
+              message: "一言已经更新",
+              icon: "fa-solid fa-pen-nib"
+          });
+      }
     })
-    .catch(console.error);
+    .catch(() => {
+        if (showToast) {
+            iziToast.show({
+              message: "一言获取失败",
+              icon: "fa-solid fa-xmark"
+          });
+        }
+    });
 };
 
 
@@ -668,8 +705,15 @@ const updateLyrics = (lrc, next) => {
 
 // We need to ensure that when music plays, playingLrc is true
 // This is handled by handlePlay event
-const handlePlay = () => {
+const handlePlay = (songName) => {
     playingLrc.value = true;
+    if (songName) {
+        iziToast.show({
+            title: "正在播放",
+            message: songName,
+            icon: "fa-solid fa-compact-disc"
+        });
+    }
 }
 const handlePause = () => {
     playingLrc.value = false;
@@ -711,10 +755,53 @@ watch(wallpaperType, (newVal) => {
     setBg(newVal);
 });
 
-let timeInterval;
-let capsuleInterval;
+// iziToast Defaults to Glass
+iziToast.settings({
+    class: 'iziToast-glass', // apply glass style by default
+    position: 'topRight',
+    transitionIn: 'bounceInLeft',
+    transitionOut: 'fadeOutRight',
+    progressBar: false,
+    close: false,
+    timeout: 3000
+});
+
+// Greetings
+const hello = () => {
+    const hour = new Date().getHours();
+    let message = "";
+    if (hour >= 6 && hour < 12) message = "早上好！又是元气满满的一天";
+    else if (hour >= 12 && hour < 14) message = "中午好！吃过午饭了吗？";
+    else if (hour >= 14 && hour < 19) message = "下午好！";
+    else if (hour >= 19 && hour < 23) message = "晚上好！";
+    else message = "夜深了，早点休息";
+    
+    iziToast.show({
+        title: "哈喽",
+        message: message,
+        icon: "fa-solid fa-hand-spock"
+    });
+};
 
 onMounted(() => {
+  hello();
+
+  // Typewriter Init
+  if (config.who_am_i_1) {
+    const strings = [];
+    if(config.who_am_i_1) strings.push(config.who_am_i_1);
+    if(config.who_am_i_2) strings.push(config.who_am_i_2);
+    if(config.who_am_i_3) strings.push(config.who_am_i_3);
+    
+    new Typed('#typed-output', {
+        strings: strings,
+        typeSpeed: 100,
+        backSpeed: 50,
+        loop: true,
+        showCursor: true,
+    });
+  }
+
   // Init Wallpaper
   const savedType = localStorage.getItem('wallpaperType') || '1';
   setBg(savedType);
@@ -750,14 +837,6 @@ onMounted(() => {
   // Loading Fake Delay
   setTimeout(() => {
     isLoading.value = false;
-    setTimeout(() => {
-        iziToast.show({
-            timeout: 2500,
-            icon: false,
-            title: t('welcome_title'),
-            message: t('welcome_msg')
-        });
-    }, 800)
   }, 800);
   
   setTimeout(() => {

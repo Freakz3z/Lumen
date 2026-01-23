@@ -152,7 +152,7 @@ onMounted(() => {
         } catch (e) {
             currentMusicName.value = t('music_loading');
         }
-        emit('play');
+        emit('play', currentMusicName.value);
       });
       
       ap.value.on("pause", () => {

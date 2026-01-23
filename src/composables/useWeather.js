@@ -1,4 +1,4 @@
-import { reactive, onMounted, watch } from 'vue';
+import { reactive, onMounted, watch, ref } from 'vue';
 import iziToast from "izitoast";
 import i18n from '../i18n';
 
@@ -14,7 +14,29 @@ export function useWeather() {
         windScale: "",
     });
 
+    const lastWeatherTime = ref(0);
     const updateWeather = (showToast = false) => {
+        const now = Date.now();
+        if (showToast && now - lastWeatherTime.value < 2000) {
+             iziToast.show({
+                message: "你点的太快了",
+                icon: "fa-solid fa-triangle-exclamation",
+                timeout: 3000, 
+                progressBar: false, 
+                position: 'topCenter',
+                transitionIn: 'fadeInDown',
+            });
+            return;
+        }
+        if (showToast) {
+            lastWeatherTime.value = now;
+            iziToast.show({
+                message: "天气正在更新",
+                icon: "fa-solid fa-arrows-rotate fa-spin",
+                timeout: 2000
+            });
+        }
+
         iziToast.settings({
             timeout: 3000, 
             progressBar: false, 
@@ -53,7 +75,7 @@ export function useWeather() {
                                                 iziToast.show({
                                                     timeout: 2000,
                                                     icon: "fa-solid fa-cloud-sun",
-                                                    message: t('weather_updated')
+                                                    message: "天气已更新"
                                                 });
                                             }
                                         }
@@ -62,7 +84,16 @@ export function useWeather() {
                         })
                 }
             })
-            .catch(console.error);
+            .catch(err => {
+                console.error(err);
+                if(showToast) {
+                     iziToast.show({
+                        message: "天气更新失败",
+                        icon: "fa-solid fa-triangle-exclamation"
+                    });
+                }
+                weather.text = "获取失败";
+            });
     };
 
     onMounted(() => {

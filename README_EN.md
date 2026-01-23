@@ -1,40 +1,56 @@
 <div align="center">
-  <img src="./src/assets/img/icon/avatar.jpg" width="100" height="100" style="border-radius: 50%;" alt="Logo">
-  <h1>Freakk Personal Page (Vue)</h1>
+  <img src="./src/assets/img/icon/avatar.jpg" width="120" height="120" style="border-radius: 50%; box-shadow: 0 0 15px rgba(0,0,0,0.2);" alt="Logo">
+  <h1>Personal Page (Vue Refactor)</h1>
   <p>
-     refactored with <b>Vue 3</b> + <b>Vite</b>
+    A modern, high-performance personal homepage refactored with <b>Vue 3</b> + <b>Vite</b>.
   </p>
   
+  <p align="center">
+    <span>English</span> | <a href="./README.md">简体中文</a>
+  </p>
+
   <p>
     <a href="https://vuejs.org/">
-      <img src="https://img.shields.io/badge/vue-3.x-42b883.svg" alt="Vue 3">
+      <img src="https://img.shields.io/badge/Vue-3.x-42b883?style=flat-square&logo=vue.js" alt="Vue 3">
     </a>
     <a href="https://vitejs.dev/">
-      <img src="https://img.shields.io/badge/vite-5.x-646cff.svg" alt="Vite">
+      <img src="https://img.shields.io/badge/Vite-5.x-646cff?style=flat-square&logo=vite" alt="Vite">
     </a>
     <a href="https://getbootstrap.com/">
-      <img src="https://img.shields.io/badge/bootstrap-5.x-purple.svg" alt="Bootstrap 5">
+      <img src="https://img.shields.io/badge/Bootstrap-5.x-purple?style=flat-square&logo=bootstrap" alt="Bootstrap 5">
+    </a>
+    <a href="https://github.com/Freakz3z/Personal-Page/blob/main/LICENSE">
+      <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License">
     </a>
   </p>
 </div>
 
+---
+
 ## 📖 Introduction
 
-This is a clean, beautiful, and feature-rich personal homepage project. Originally built with HTML/jQuery, it has been completely refactored using **Vue 3 Composition API** + **Vite**.
-It integrates a music player, real-time weather, a "Time Capsule", dynamic wallpapers, and more. It is also deeply optimized for mobile devices, providing a silky-smooth experience similar to native apps.
+This is a minimalist, aesthetic, and feature-rich personal homepage. Originally built with HTML/jQuery, it has been completely rewritten using **Vue 3 Composition API** + **Vite**.
+It integrates functionalities like a music player, guestbook, real-time weather, time capsule, and dynamic particle backgrounds, all deeply optimized for a silky-smooth experience on both desktop and mobile devices.
 
 ## ✨ Features
 
-- ⚡️ **Modern Tech Stack** - Built with Vue 3 + Vite for instant startup and lightning-fast HMR.
-- 📱 **Fully Responsive** - Perfect display across PC, tablets, and mobile (Immersive full-screen experience on mobile).
-- 🎵 **Immersive Music Experience** - Redesigned music interface with **Visual Rolling Lyrics**, supporting active highlighting, smooth scrolling, and fade effects.
-- 💬 **Message Board** - Integrated **Giscus** comment system, secure and database-free.
-- ✨ **Dynamic Effects** - Upgraded **Sakura Falling** background animation (Canvas based), featuring physics-simulated swaying and rotation.
-- 🔗 **Social Aggregation** - Smart parsing for QQ, Email, Telegram, and other social links.
-- 🌤 **Real-time Weather** - Automatic location detection and weather display via QWeather/MXNZP APIs.
-- ⏳ **Time Capsule** - Visualizes the progress of the day, week, month, and year to remind you to cherish time.
-- 🎨 **Dynamic Wallpapers** - Supports switching between local wallpapers, Bing Daily Image, and Anime/Landscape Random APIs, with persistent storage.
-- ⚙️ **Simple Config** - Customize site info, links, and social media quickly via `setting.json`.
+### 🎨 Visual & UI
+- **⚡️ Modern Stack** - Built with Vue 3 + Vite for instant load times and rapid development.
+- **📱 Responsive Design** - Perfectly adapts to all screen sizes, offering an immersive full-screen experience on mobile.
+- **💎 Glassmorphism** - Global **iziToast** notification system customized with frosted glass effects for sophisticated feedback.
+- **⌨️ Identity Typewriter** - Features a `Typed.js` integration under the logo to cyclically display your multiple identities (e.g., Student, Developer).
+
+### 🛠 Utilities
+- **🎵 Immersive Music** - Integrated player with a dedicated lyrics panel, progress dragging, highlighting, and support for Netease/Tencent playlists.
+- **🌦 Real-time Weather** - Automatically detects location and displays weather info with "Updating..." interactive feedback.
+- **⏳ Time Capsule** - Visualizes the progress of the current day, week, month, and year to remind you to cherish every moment.
+- **💬 Message Board** - **Giscus** powered comment system (GitHub Discussions based), secure and database-free.
+- **🔗 Social Hub** - Smart aggregation of your social links (GitHub, Email, Telegram, etc.).
+
+### ⚙️ System
+- **🌸 Dynamic Background** - Upgraded Canvas-based "Sakura Falling" effect with physics simulation.
+- **🖼 Wallpaper Switching** - Supports Local, Bing Daily, Random Anime, and Random Landscape modes with preference persistence.
+- **🔧 Easy Config** - All configurations are centralized in `setting.json`. No code changes needed for personalization.
 
 ## 🚀 Quick Start
 
@@ -42,73 +58,84 @@ It integrates a music player, real-time weather, a "Time Capsule", dynamic wallp
 - Node.js > 16.0
 - npm / yarn / pnpm
 
-### Install Dependencies
+### 1. Clone
+```bash
+git clone https://github.com/Freakz3z/Personal-Page.git
+cd Personal-Page
+```
+
+### 2. Install
 ```bash
 npm install
 ```
 
-### Run Development Server
+### 3. Dev Server
 ```bash
 npm run dev
 ```
 
-### Build for Production
+### 4. Build
 ```bash
 npm run build
 ```
+Output files will be in `dist`.
 
-### Linting & Formatting
-```bash
-# Check for issues
-npm run lint
-
-# Auto-fix formatting
-npm run format
-```
-
-## 📂 Folder Structure
+## 📂 Project Structure
 
 ```
-src/
-├── assets/          # Static assets (css, img, fonts, icons)
-├── components/      # UI Components (Background, MusicPlayer)
-├── composables/     # Composition API Hooks (useTime, useWeather) - Reusable Logic
-├── App.vue          # Main App Logic
-└── main.js          # Entry point
+Personal-Page/
+├── src/
+│   ├── assets/             # Assets (css, img, fonts)
+│   ├── components/         # Vue Components
+│   │   ├── Background.vue  # Canvas Background
+│   │   ├── MusicPlayer.vue # Player Logic
+│   │   └── MessageBoard.vue# Giscus wrapper
+│   ├── composables/        # Composition API Hooks
+│   │   ├── useTime.js      # Time Logic
+│   │   └── useWeather.js   # Weather Logic
+│   ├── App.vue             # Main Entry
+│   └── main.js             # Vue Init
+├── setting.json            # Global Config
+└── README_EN.md
 ```
 
 ## ⚙️ Configuration
 
-All personal configurations are located in `src/setting.json`.
-You can directly modify this file to customize:
+Customization is easy via `setting.json` in the root directory.
 
+### Config Example
 ```json
 {
-    "title": "Site Title",
-    "description": "Site Description",
-    "author": "Your Name",
-    "logo_img": "Path to Avatar",
+    "title": "My Homepage",
+    "description": "Meta Description",
+    "author": "Freakk",
     
-    // Social Links (Auto-display icons)
-    "github": "Github Username",
-    "qq": "QQ Number",
-    "email": "Email Address",
-    "bilibili": "Bilibili UID (Optional)",
-    "telegram": "Telegram Username (Optional)",
+    // Typewriter Text
+    "who_am_i_1": "Student",
+    "who_am_i_2": "Developer",
+    "who_am_i_3": "Dreamer",
+
+    // Socials
+    "github": "Freakz3z",
+    "email": "your@email.com",
     
-    "link_1": ["URL", "Icon Class", "Link Name"],
-    // ...more links
+    // Music (Meting API)
+    "music_server": "netease",      // netease, tencent
+    "music_type": "playlist",       // playlist, song
+    "music_id": "3778678",          // Playlist ID
+    
+    // Custom Links
+    "link_1": ["https://blog.com", "fa-solid fa-blog", "My Blog"]
 }
 ```
 
-## 🛠 Tech Stack
+## ☁️ Deployment
 
-- **Core**: [Vue.js 3](https://vuejs.org/)
-- **Build Tool**: [Vite](https://vitejs.dev/)
-- **UI Framework**: [Bootstrap 5](https://getbootstrap.com/) (Grid & Base styles)
-- **Music**: [APlayer](https://github.com/DIYgod/APlayer)
-- **Notifications**: [iziToast](https://izitoast.marcelodolce.com/)
-- **Icons**: [FontAwesome 6](https://fontawesome.com/)
+**Vercel** is recommended:
+1. Fork this repo.
+2. Import to Vercel.
+3. Select `Vite` preset.
+4. Deploy.
 
 ## 📄 License
 
