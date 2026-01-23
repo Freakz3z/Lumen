@@ -2,7 +2,7 @@
   <img src="./src/assets/img/icon/avatar.jpg" width="100" height="100" style="border-radius: 50%;" alt="Logo">
   <h1>Freakk Personal Page (Vue)</h1>
   <p>
-    A stylish personal homepage refactored with <b>Vue 3</b> + <b>Vite</b>
+     refactored with <b>Vue 3</b> + <b>Vite</b>
   </p>
   
   <p>
@@ -27,7 +27,9 @@ It integrates a music player, real-time weather, a "Time Capsule", dynamic wallp
 
 - ⚡️ **Modern Tech Stack** - Built with Vue 3 + Vite for instant startup and lightning-fast HMR.
 - 📱 **Fully Responsive** - Perfect display across PC, tablets, and mobile (Immersive full-screen experience on mobile).
-- 🎵 **Music Player** - Built-in APlayer with Meting API support (Netease/QQ Music playlists), featuring rolling lyrics, drag-to-seek, and list management.
+- 🎵 **Immersive Music Experience** - Redesigned music interface with **Visual Rolling Lyrics**, supporting active highlighting, smooth scrolling, and fade effects.
+- 💬 **Message Board** - Integrated **Giscus** comment system, secure and database-free.
+- 🔗 **Social Aggregation** - Smart parsing for QQ, Email, Telegram, and other social links.
 - 🌤 **Real-time Weather** - Automatic location detection and weather display via QWeather/MXNZP APIs.
 - ⏳ **Time Capsule** - Visualizes the progress of the day, week, month, and year to remind you to cherish time.
 - 🎨 **Dynamic Wallpapers** - Supports switching between local wallpapers, Bing Daily Image, and Anime/Landscape Random APIs, with persistent storage.
@@ -79,7 +81,14 @@ You can directly modify this file to customize:
     "description": "Site Description",
     "author": "Your Name",
     "logo_img": "Path to Avatar",
+    
+    // Social Links (Auto-display icons)
     "github": "Github Username",
+    "qq": "QQ Number",
+    "email": "Email Address",
+    "bilibili": "Bilibili UID (Optional)",
+    "telegram": "Telegram Username (Optional)",
+    
     "link_1": ["URL", "Icon Class", "Link Name"],
     // ...more links
 }
@@ -96,4 +105,4 @@ You can directly modify this file to customize:
 
 ## 📄 License
 
-MIT License © 2024 Freakk
+MIT License © 2026 Freakk

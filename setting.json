@@ -5,12 +5,14 @@
     "author": "Freakk",
     "logo_img": "./assets/img/icon/avatar.jpg",
     "logo_text_1": "Freakk",
-    "logo_text_2": "love",
+    "logo_text_2": "",
     "github": "Freakz3z",
+    "qq": "3020517046",
+    "email": "3020517046@qq.com",
     "link_1": [
         "https://freakk.love/",
         "fa-solid fa-blog",
-        "博客"
+        "我的博客"
     ],
     "link_2": [
         "https://github-wrapped4u.vercel.app/",
@@ -28,14 +30,24 @@
         "英语助手"
     ],
     "link_5": [
-        "https://freakk.love/",
+        "",
         "fa-solid fa-flask",
         "开发中..."
     ],
     "link_6": [
-        "https://freakk.love/",
+        "",
         "fa-solid fa-flask",
-        "敬请期待..."
+        "开发中..."
     ],
+    "music_server": "netease",
+    "music_type": "playlist",
+    "music_id": "3778678",
+    "music_api": "https://api.injahow.cn/meting/",
+    "giscus": {
+        "repo": "Freakz3z/Freakk-Personal-Page",
+        "repoId": "R_kgDOQ_scEA",
+        "category": "General",
+        "categoryId": "DIC_kwDOQ_scEM4C1VBD"
+    },
     "Copyright_text": "Freakk"
 }

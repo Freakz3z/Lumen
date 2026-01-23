@@ -40,13 +40,13 @@
 import { ref, onMounted, computed, watch } from "vue";
 import APlayer from "aplayer";
 import iziToast from "izitoast";
-import config from "../setting.json";
+import config from "../../setting.json";
 
 const props = defineProps({
   show: Boolean,
   targetContainer: Object // Element ref
 });
-const emit = defineEmits(["close", "open-box", "update-lyrics", "play", "pause", "update-progress"]);
+const emit = defineEmits(["close", "open-box", "update-lyrics", "play", "pause", "update-progress", "load-lrc", "time-update"]);
 
 const isPlaying = ref(false);
 const currentMusicName = ref("未播放音乐");
@@ -54,6 +54,27 @@ const isHovering = ref(false);
 const volume = ref(0.5);
 const ap = ref(null);
 const aplayerRef = ref(null);
+
+const parseLrc = (lrc) => {
+    if (!lrc) return [];
+    const lines = lrc.split('\n');
+    const result = [];
+    const timeReg = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/;
+    for (let line of lines) {
+        const match = timeReg.exec(line);
+        if (match) {
+            const min = parseInt(match[1]);
+            const sec = parseInt(match[2]);
+            const ms = parseInt(match[3]);
+            const s = min * 60 + sec + (ms / (match[3].length === 3 ? 1000 : 100));
+            const text = line.replace(/\[.*?\]/g, '').trim();
+            if (text) {
+                result.push({ time: s, text });
+            }
+        }
+    }
+    return result;
+};
 
 const volumeIcon = computed(() => {
   if (volume.value == 0) return "fa-volume-xmark";
@@ -99,12 +120,27 @@ onMounted(() => {
 
       ap.value.on("play", () => {
         isPlaying.value = true;
-        // Fix: Use a safer way to get current audio
-        // Sometimes list.index is reliable, sometimes audio array is better
         try {
             const index = ap.value.list.index;
             const item = ap.value.list.audios[index];
             currentMusicName.value = `${item.name} - ${item.artist}`;
+            
+            // Emit Lyrics List
+            const lrc = item.lrc;
+            // Check if lrc is a URL (Meting usually returns URL) or raw text
+            if (lrc && !lrc.startsWith('[') && (lrc.startsWith('http') || lrc.startsWith('/'))) {
+                 fetch(lrc)
+                    .then(r => r.text())
+                    .then(text => {
+                        const parsed = parseLrc(text);
+                        emit('load-lrc', parsed);
+                    })
+                    .catch(() => emit('load-lrc', []));
+            } else {
+                // Assume it's raw text or empty
+                const parsed = parseLrc(lrc);
+                emit('load-lrc', parsed);
+            }
         } catch (e) {
             currentMusicName.value = "加载中...";
         }
@@ -114,6 +150,31 @@ onMounted(() => {
       ap.value.on("pause", () => {
         isPlaying.value = false;
         emit('pause');
+      });
+      
+      ap.value.on("listswitch", () => {
+          // Update title immediately on switch
+           try {
+            const index = ap.value.list.index;
+            const item = ap.value.list.audios[index];
+            currentMusicName.value = `${item.name} - ${item.artist}`;
+             // Emit Lyrics List
+            const lrc = item.lrc;
+            if (lrc && !lrc.startsWith('[') && (lrc.startsWith('http') || lrc.startsWith('/'))) {
+                 fetch(lrc)
+                    .then(r => r.text())
+                    .then(text => {
+                         const parsed = parseLrc(text);
+                         emit('load-lrc', parsed);
+                    })
+                    .catch(() => emit('load-lrc', []));
+            } else {
+                 const parsed = parseLrc(lrc);
+                 emit('load-lrc', parsed);
+            }
+           } catch(e) {
+               console.error(e);
+           }
       });
 
       ap.value.on("error", () => {
@@ -125,8 +186,10 @@ onMounted(() => {
       ap.value.on("timeupdate", () => {
           // Progress
           if (ap.value && ap.value.audio.duration) {
-              const pct = (ap.value.audio.currentTime / ap.value.audio.duration) * 100;
+              const current = ap.value.audio.currentTime;
+              const pct = (current / ap.value.audio.duration) * 100;
               emit('update-progress', pct);
+              emit('time-update', current);
           }
           
           if (container) {

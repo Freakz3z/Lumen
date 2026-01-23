@@ -17,6 +17,7 @@
       </div>
     </div>
 
+    <Background />
     <section
       id="section"
       class="section"
@@ -79,15 +80,65 @@
                 <!--社交链接-->
                 <div class="social" id="social">
                   <a
+                    v-if="config.github"
                     :href="'https://github.com/' + config.github"
                     class="link"
                     id="github"
-                    style="margin-left: 4px"
                     target="_blank"
+                    title="Github"
                   >
                     <i class="fa-brands fa-github"></i>
                   </a>
-                  <a id="link-text" href="mailto:email@example.com">通过这里联系我</a>
+                  
+                  <a
+                    v-if="config.qq"
+                    :href="'http://wpa.qq.com/msgrd?v=3&uin=' + config.qq + '&site=qq&menu=yes'"
+                    class="link"
+                    id="qq"
+                    target="_blank"
+                    title="QQ"
+                  >
+                    <i class="fa-brands fa-qq"></i>
+                  </a>
+                  
+                  <a
+                    v-if="config.email"
+                    :href="'mailto:' + config.email"
+                    class="link"
+                    id="email"
+                    target="_blank"
+                    title="Email"
+                  >
+                    <i class="fa-solid fa-envelope"></i>
+                  </a>
+                   <a
+                    v-if="config.bilibili"
+                    :href="'https://space.bilibili.com/' + config.bilibili"
+                    class="link"
+                    id="bilibili"
+                    target="_blank"
+                    title="Bilibili"
+                  >
+                    <i class="fa-brands fa-bilibili"></i>
+                  </a>
+                  <a
+                    v-if="config.telegram"
+                    :href="'https://t.me/' + config.telegram"
+                    class="link"
+                    id="telegram"
+                    target="_blank"
+                    title="Telegram"
+                  >
+                    <i class="fa-brands fa-telegram"></i>
+                  </a>
+
+                  <a class="link" id="message-board-btn" @click="showMessageBoard = true" style="cursor: pointer;" title="留言板">
+                     <i class="fa-solid fa-comments"></i>
+                  </a>
+                  
+                  <a id="link-text" class="link-text" :href="config.email ? 'mailto:' + config.email : 'javascript:;'">
+                    通过这里联系我
+                  </a>
                 </div>
               </div>
             </div>
@@ -138,6 +189,8 @@
                         @update-progress="updateProgress"
                         @play="handlePlay"
                         @pause="handlePause"
+                        @load-lrc="handleLoadLrc"
+                        @time-update="handleTimeUpdate"
                         :target-container="aplayerContainer"
                     />
                   </div>
@@ -271,21 +324,31 @@
             </div>
             <div class="line">
               <i class="fa-solid fa-angle-left"></i>
-              <span class="line-text">网站列表</span>
+              <span class="line-text">个性化设置</span>
               <i class="fa-solid fa-angle-right"></i>
             </div>
-            <!-- Replicating links for mobile/more view if needed, or simplified -->
-            <div class="row" v-for="k in 2" :key="k">
-              <div class="col" v-for="j in 3" :key="j">
-                <a :href="config[`link_${(k - 1) * 3 + j}`][0]" target="_blank">
-                  <div class="link-card cards">
-                    <span class="link-name">{{
-                      config[`link_${(k - 1) * 3 + j}`][2]
-                    }}</span>
-                  </div>
-                </a>
-              </div>
+            
+             <!-- Settings moved here -->
+            <div class="settings-simple" style="width: 100%; max-width: 400px; margin: 0 auto 20px;">
+                <div class="setting-item">
+                    <div class="setting-title" style="color:white; margin-bottom: 15px; font-weight:bold; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px;">
+                        <i class="fa-solid fa-image"></i> 壁纸设置
+                    </div>
+                    <div class="set">
+                        <div class="wallpaper" id="wallpaper" style="justify-content: center;">
+                            <div class="form-radio">
+                                <input type="radio" class="set-wallpaper" id="radio1" value="1" name="wallpaper-type" v-model="wallpaperType">
+                                <label for="radio1">默认壁纸</label>
+                            </div>
+                            <div class="form-radio">
+                                <input type="radio" class="set-wallpaper" id="radio2" value="2" name="wallpaper-type" v-model="wallpaperType">
+                                <label for="radio2" id="wallpaper_text1">每日一图</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
           </div>
         
         <!-- 更多页面 (Box - Settings & Music) -->
@@ -297,61 +360,41 @@
                 </div>
                 <!--左侧内容-->
                 <div class="box-left">
-                    <div class="img-title">
-                        <span class="img-title-big" id="logo-title-other">{{ config.logo_text_1 }}</span>
-                        <span class="img-text" id="logo-title-other-small">.{{ config.logo_text_2 }}</span><br/>
-                        <span class="img-text">&nbsp;v&nbsp;2.0</span>
-                        <a :href="'https://github.com/' + config.github" target="_blank">
-                            <i class="fa-brands fa-github"></i>
-                        </a>
-                    </div>
-                    <!--更多内容-->
-                    <div class="accordion" id="accordion">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingOne">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#collapseOne" aria-expanded="true"
-                                        aria-controls="collapseOne">
-                                    壁纸设置
-                                </button>
-                            </h2>
-                            <div id="collapseOne" class="accordion-collapse collapse show"
-                                    aria-labelledby="headingOne" data-bs-parent="#accordion">
-                                <div class="accordion-body">
-                                    <div class="set">
-                                        <div class="wallpaper" id="wallpaper">
-                                            <div class="form-radio">
-                                                <input type="radio" class="set-wallpaper" id="radio1" value="1" name="wallpaper-type" v-model="wallpaperType">
-                                                <label for="radio1">默认壁纸</label>
-                                            </div>
-                                            <div class="form-radio">
-                                                <input type="radio" class="set-wallpaper" id="radio2" value="2" name="wallpaper-type" v-model="wallpaperType">
-                                                <label for="radio2" id="wallpaper_text1">每日一图</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                    <!-- APlayer-like Lyrics Container -->
+                     <!-- We rename "box-lrc-container" to imply styling or just add style -->
+                     <!-- Flex:1 makes it fill the left side -->
+                    <div class="box-lrc-container" style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; position:relative; overflow:hidden;">
+                        
+                         <!-- Default Welcome -->
+                        <div v-if="!playingLrc" style="text-align:center; opacity:0.8; height: 100%; display: flex; flex-direction: column; justify-content: center; width: 100%;">
+                             <div class="img-title" style="margin-bottom: 2rem;">
+                                <span class="img-title-big" id="logo-title-other">{{ config.logo_text_1 }}</span>
+                                <span class="img-text" id="logo-title-other-small">.{{ config.logo_text_2 }}</span><br/>
+                                <span class="img-text">&nbsp;v&nbsp;2.0</span>
+                                <a :href="'https://github.com/' + config.github" target="_blank" style="margin-left: 0.5rem; color: inherit;">
+                                    <i class="fa-brands fa-github"></i>
+                                </a>
                             </div>
+                             <p>每一天，都值得被记录</p>
+                             <p>每一刻，都值得去珍惜</p>
+                             <p>希望你今天也开心</p>
                         </div>
-                        <!--更新日志-->
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingTwo">
-                                <button class="accordion-button collapsed" type="button"
-                                        data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                                        aria-expanded="false" aria-controls="collapseTwo">
-                                    更新日志
-                                </button>
-                            </h2>
-                            <div id="collapseTwo" class="accordion-collapse collapse"
-                                    aria-labelledby="headingTwo" data-bs-parent="#accordion">
-                                <div class="accordion-body">
-                                    <div class="upnote">
-                                        <span class="uptext"><i class="fa-solid fa-circle-plus"></i>&nbsp;Vue 3 重构</span>
-                                        <span class="uptext"><i class="fa-solid fa-circle-plus"></i>&nbsp;音乐歌单自定义</span>
-                                        <span class="uptext"><i class="fa-solid fa-circle-plus"></i>&nbsp;壁纸个性化</span>
-                                    </div>
-                                </div>
-                            </div>
+
+                         <!-- Lyrics Flow -->
+                        <div v-else class="lrc-scroll-box" style="height: 65vh; width: 100%; overflow: hidden; position: relative; margin: auto;">
+                             <!-- Gradient Mask for fade effect top/bottom -->
+                             <div class="lrc-mask-top" style="position:absolute; top:0; left:0; width:100%; height:15%; background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, transparent 100%); z-index:2; pointer-events:none;"></div>
+                             
+                             <ul :style="{ transform: `translateY(${lrcTranslateY})`, transition: 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)' }" 
+                                 style="list-style:none; padding:0; margin:0; text-align:center; width: 100%;">
+                                <li v-for="(line, index) in fullLrcList" :key="index" 
+                                    :class="{ 'lrc-active': index === currentLrcIndex }"
+                                    style="padding: 10px 0; transition: all 0.4s; font-size: 16px; line-height: 24px; color: rgba(255,255,255,0.4); min-height: 44px;">
+                                    <span style="display:inline-block; max-width: 90%;">{{ line.text }}</span>
+                                </li>
+                            </ul>
+                            
+                            <div class="lrc-mask-bottom" style="position:absolute; bottom:0; left:0; width:100%; height:15%; background: linear-gradient(to top, rgba(255,255,255,0) 0%, transparent 100%); z-index:2; pointer-events:none;"></div>
                         </div>
                     </div>
                 </div>
@@ -387,16 +430,18 @@
               style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:pointer;" />
          </div>
       </footer>
-
+      <MessageBoard :show="showMessageBoard" :config="config.giscus" @close="showMessageBoard = false" />
     </section>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, onUnmounted } from "vue";
+import { ref, reactive, onMounted, onUnmounted, computed } from "vue";
 import iziToast from "izitoast";
+import MessageBoard from "./components/MessageBoard.vue";
+import Background from "./components/Background.vue";
 import MusicPlayer from "./components/MusicPlayer.vue";
-import configData from "./setting.json";
+import configData from "../setting.json";
 
 // Config & State
 const config = reactive(configData);
@@ -404,6 +449,7 @@ const isLoading = ref(true);
 const loadingText = ref("加载中");
 const showMore = ref(false);
 const showBox = ref(false);
+const showMessageBoard = ref(false);
 const showMusic = ref(false);
 const isHitokotoHover = ref(false);
 const wallpaperType = ref("1");
@@ -413,6 +459,37 @@ const currentLrc = ref("");
 const musicProgress = ref(0);
 const isSeeking = ref(false);
 const musicPlayerRef = ref(null);
+
+// Lyrics Scrolling Logic
+const fullLrcList = ref([]);
+const currentLrcIndex = ref(0);
+const boxLeftHeight = ref(400); // Approximate default height, can be dynamic
+const lrcTranslateY = computed(() => {
+    // Container is 65vh. Center is 32.5vh.
+    // Standard line height = 24px + 20px padding = 44px.
+    // Active line is larger, purely visual center adjustment ~30px.
+    return `calc(32.5vh - 30px - ${currentLrcIndex.value * 44}px)`;
+});
+
+const handleLoadLrc = (list) => {
+    fullLrcList.value = list;
+    currentLrcIndex.value = 0;
+};
+
+const handleTimeUpdate = (time) => {
+    if (!fullLrcList.value || fullLrcList.value.length === 0) return;
+    let idx = -1;
+    for (let i = 0; i < fullLrcList.value.length; i++) {
+        if (fullLrcList.value[i].time <= time) {
+            idx = i;
+        } else {
+            break;
+        }
+    }
+    if (idx !== -1 && idx !== currentLrcIndex.value) {
+        currentLrcIndex.value = idx;
+    }
+};
 
 const updateProgress = (pct) => {
     if(!isSeeking.value) {
@@ -748,19 +825,26 @@ onMounted(() => {
   const savedType = localStorage.getItem('wallpaperType') || '1';
   setBg(savedType);
 
-  // Mouse Pointer Logic
+  // Mobile Check (simple)
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+
+  // Mouse Pointer Logic & Right Click
   const body = document.querySelector("body");
   const p2 = pointer2.value;
   if(p2) {
-      body.addEventListener('mousemove', (e) => {
-        window.requestAnimationFrame(() => {
-            // pointer2 width is 18px (from css) -> half is 9
-             p2.style.transform = `translate(${e.clientX - 9}px, ${e.clientY - 9}px)`;
-        });
-      });
-      // Hide on mobile
-      if (/AppWebKit.*Mobile.*/.test(window.navigator.userAgent)) {
-         p2.style.display = 'none';
+      if (!isMobile) {
+          // Enable custom pointer only on desktop
+          body.addEventListener('mousemove', (e) => {
+            window.requestAnimationFrame(() => {
+                 p2.style.transform = `translate(${e.clientX - 9}px, ${e.clientY - 9}px)`;
+            });
+          });
+          
+          // Disable right click on desktop
+          document.oncontextmenu = function(){ return false; };
+      } else {
+          // Hide custom pointer on mobile
+          p2.style.display = 'none';
       }
   }
 
@@ -800,7 +884,14 @@ onUnmounted(() => {
 </script>
 
 <style>
-/* Add transition for showing/hiding more */
+/* Active Lyrics Style */
+.lrc-active {
+    font-size: 1.4rem !important;
+    font-weight: bold;
+    color: #fff !important;
+    text-shadow: 0 0 10px rgba(0,0,0,0.5);
+    transform: scale(1.05); /* Optional: slight scale up */
+}
 .fade-up-enter-active,
 .fade-up-leave-active {
   transition: all 0.5s ease;
