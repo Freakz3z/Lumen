@@ -27,6 +27,10 @@
 
 ---
 
+<div align="center">
+    <img src="./src/assets/img/page-preview.png" alt="Homepage Preview" width="100%" style="border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.15);">
+</div>
+
 ## 📖 Introduction
 
 This is a minimalist, aesthetic, and feature-rich personal homepage. Originally built with HTML/jQuery, it has been completely rewritten using **Vue 3 Composition API** + **Vite**.

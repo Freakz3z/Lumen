@@ -27,6 +27,10 @@
 
 ---
 
+<div align="center">
+    <img src="./src/assets/img/page-preview.png" alt="Homepage Preview" width="100%" style="border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.15);">
+</div>
+
 ## 📖 简介 | Introduction
 
 这是一个简洁、美观且功能丰富的个人主页项目。原项目基于 HTML/jQuery 开发，现已完全使用 **Vue 3 Composition API** + **Vite** 进行重构。
