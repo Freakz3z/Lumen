@@ -1,6 +1,6 @@
 <div align="center">
   <img src="./src/assets/img/icon/avatar.jpg" width="120" height="120" style="border-radius: 50%; box-shadow: 0 0 15px rgba(0,0,0,0.2);" alt="Logo">
-  <h1>Personal Page (Vue Refactor)</h1>
+  <h1>Lumen</h1>
   <p>
     一个基于 <b>Vue 3</b> + <b>Vite</b> 重构的现代化、高颜值个人主页
   </p>
@@ -64,8 +64,8 @@
 
 ### 1. 克隆项目
 ```bash
-git clone https://github.com/Freakz3z/Personal-Page.git
-cd Personal-Page
+git clone https://github.com/Freakz3z/Lumen.git
+cd Lumen
 ```
 
 ### 2. 安装依赖
@@ -87,7 +87,7 @@ npm run build
 ## 📂 项目结构 | Project Structure
 
 ```
-Personal-Page/
+Lumen/
 ├── src/
 │   ├── assets/             # 静态资源 (css, img, fonts)
 │   ├── components/         # UI 组件
@@ -110,7 +110,7 @@ Personal-Page/
 ### 核心配置示例
 ```json
 {
-    "title": "Freakkの主页",
+    "title": "Lumen",
     "description": "Meta描述信息",
     "author": "Freakk",
     

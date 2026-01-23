@@ -11,9 +11,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
       manifest: {
-        name: 'Freakk Personal Page',
-        short_name: 'Freakk',
-        description: 'A personal homepage built with Vue 3',
+        name: 'Lumen',
+        short_name: 'Lumen',
+        description: 'A minimalist, aesthetic personal homepage built with Vue 3',
         theme_color: '#424242',
         icons: [
           {

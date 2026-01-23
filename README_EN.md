@@ -1,6 +1,6 @@
 <div align="center">
   <img src="./src/assets/img/icon/avatar.jpg" width="120" height="120" style="border-radius: 50%; box-shadow: 0 0 15px rgba(0,0,0,0.2);" alt="Logo">
-  <h1>Personal Page (Vue Refactor)</h1>
+  <h1>Lumen</h1>
   <p>
     A modern, high-performance personal homepage refactored with <b>Vue 3</b> + <b>Vite</b>.
   </p>
@@ -64,8 +64,8 @@ It integrates functionalities like a music player, guestbook, real-time weather,
 
 ### 1. Clone
 ```bash
-git clone https://github.com/Freakz3z/Personal-Page.git
-cd Personal-Page
+git clone https://github.com/Freakz3z/Lumen.git
+cd Lumen
 ```
 
 ### 2. Install
@@ -87,7 +87,7 @@ Output files will be in `dist`.
 ## 📂 Project Structure
 
 ```
-Personal-Page/
+Lumen/
 ├── src/
 │   ├── assets/             # Assets (css, img, fonts)
 │   ├── components/         # Vue Components
