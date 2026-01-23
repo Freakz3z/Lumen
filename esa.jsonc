@@ -1,0 +1,5 @@
+{
+    "name": "personal-page-vue",
+    "assets": "./dist",
+    "compression": "brotli"
+}
