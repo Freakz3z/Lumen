@@ -434,11 +434,30 @@ const finishSeek = () => {
 
 // Background Image Handling
 const bgImages = import.meta.glob('./assets/img/background*.webp', { eager: true, import: 'default' })
+// Icon Images Handling for dynamic paths
+const iconImages = import.meta.glob('./assets/img/icon/*', { eager: true, import: 'default' });
+
 const bgUrl = ref(""); 
 const pointer2 = ref(null);
 
 const resolveAsset = (path) => {
   if (path && path.startsWith("./assets")) {
+    // Attempt to match from glob
+    // Path example: ./assets/img/icon/avatar.jpg
+    // glob keys: ./assets/img/icon/avatar.jpg
+    if (iconImages[path]) {
+        return iconImages[path];
+    }
+    // Fallback for simple new URL if mapped but not in glob (e.g. background)
+    // But backgrounds are handled separately by setBg. 
+    // This resolveAsset is mostly for logo.
+    
+    // For backgrounds not in icon folder:
+    if(bgImages[path]) {
+        return bgImages[path];
+    }
+    
+    // Last resort
     return new URL(path, import.meta.url).href;
   }
   return path;
