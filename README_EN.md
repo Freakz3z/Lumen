@@ -53,7 +53,7 @@ It integrates functionalities like a music player, guestbook, real-time weather,
 
 ### ⚙️ System
 - **🌸 Dynamic Background** - Upgraded Canvas-based "Sakura Falling" effect with physics simulation.
-- **🖼 Wallpaper Switching** - Supports Local, Bing Daily, Random Anime, and Random Landscape modes with preference persistence.
+- **🖼 Wallpaper Switching** - Supports Local, Bing Daily modes with preference persistence.
 - **🔧 Easy Config** - All configurations are centralized in `setting.json`. No code changes needed for personalization.
 
 ## 🚀 Quick Start
