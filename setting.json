@@ -11,8 +11,10 @@
     "who_am_i_2": "退化到只会Accpet的Vibe Coder",
     "who_am_i_3": "模型曲线一路滑坡的AI Engineer",
     "github": "Freakz3z",
-    "qq": "3020517046",
-    "email": "3020517046@qq.com",
+    "qq": "",
+    "email": "",
+    "bilibili": "",
+    "telegram": "",
     "link_1": [
         "https://freakk.love/",
         "fa-solid fa-blog",
@@ -53,5 +55,9 @@
         "category": "General",
         "categoryId": "DIC_kwDOQ_scEM4C1VBD"
     },
-    "Copyright_text": "Freakk"
+    "Copyright_text": "Freakk",
+    "github_readme": {
+        "enabled": true,
+        "url": "https://raw.githubusercontent.com/Freakz3z/Freakz3z/main/README.md"
+    }
 }

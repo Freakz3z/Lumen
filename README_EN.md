@@ -49,7 +49,8 @@ It integrates functionalities like a music player, guestbook, real-time weather,
 - **🌦 Real-time Weather** - Automatically detects location and displays weather info with "Updating..." interactive feedback.
 - **⏳ Time Capsule** - Visualizes the progress of the current day, week, month, and year to remind you to cherish every moment.
 - **💬 Message Board** - **Giscus** powered comment system (GitHub Discussions based), secure and database-free.
-- **🔗 Social Hub** - Smart aggregation of your social links (GitHub, Email, Telegram, etc.).
+- **👤 About Me** - Automatic GitHub README fetching and Markdown rendering to showcase your projects and tech stack.
+- **🔗 Social Hub** - Smart aggregation of your social links (GitHub, QQ, Email, Bilibili, Telegram, etc.).
 
 ### ⚙️ System
 - **🌸 Dynamic Background** - Upgraded Canvas-based "Sakura Falling" effect with physics simulation.
@@ -93,7 +94,8 @@ Lumen/
 │   ├── components/         # Vue Components
 │   │   ├── Background.vue  # Canvas Background
 │   │   ├── MusicPlayer.vue # Player Logic
-│   │   └── MessageBoard.vue# Giscus wrapper
+│   │   ├── MessageBoard.vue# Giscus wrapper
+│   │   └── AboutMe.vue     # About Me component (GitHub README display)
 │   ├── composables/        # Composition API Hooks
 │   │   ├── useTime.js      # Time Logic
 │   │   └── useWeather.js   # Weather Logic
@@ -105,33 +107,118 @@ Lumen/
 
 ## ⚙️ Configuration
 
-Customization is easy via `setting.json` in the root directory.
+All customizations are centralized in `setting.json` in the root directory. No code changes required.
 
-### Config Example
+### Complete Configuration Guide
+
+#### 1. Basic Information
 ```json
 {
-    "title": "My Homepage",
-    "description": "Meta Description",
-    "author": "Freakk",
-    
-    // Typewriter Text
-    "who_am_i_1": "Student",
-    "who_am_i_2": "Developer",
-    "who_am_i_3": "Dreamer",
-
-    // Socials
-    "github": "Freakz3z",
-    "email": "your@email.com",
-    
-    // Music (Meting API)
-    "music_server": "netease",      // netease, tencent
-    "music_type": "playlist",       // playlist, song
-    "music_id": "3778678",          // Playlist ID
-    
-    // Custom Links
-    "link_1": ["https://blog.com", "fa-solid fa-blog", "My Blog"]
+    "title": "Lumen",                    // Website title
+    "description": "A minimalist...",    // Meta description (SEO)
+    "keywords": "Lumen,Personal Page",   // Meta keywords
+    "author": "Freakk",                  // Author name (shown in footer)
+    "Copyright_text": "Freakk"           // Copyright text
 }
 ```
+
+#### 2. Logo & Identity Display
+```json
+{
+    "logo_img": "./assets/img/icon/avatar.jpg",  // Avatar path
+    "logo_text_1": "Freakk",                      // Logo main title
+    "logo_text_2": "",                            // Logo subtitle
+
+    // Identity typewriter config (add 1-3, will loop)
+    "who_am_i_1": "Student",
+    "who_am_i_2": "Developer",
+    "who_am_i_3": "Dreamer"
+}
+```
+
+#### 3. Social Media Links
+```json
+{
+    "github": "Freakz3z",              // GitHub username
+    "qq": "3020517046",                // QQ number
+    "email": "3020517046@qq.com",      // Email address
+    "bilibili": "",                    // Bilibili UID (optional)
+    "telegram": ""                     // Telegram username (optional)
+}
+```
+
+#### 4. Custom Website Links (6 Quick Links)
+```json
+{
+    // Format: ["URL", "FontAwesome icon class", "Display name"]
+    "link_1": ["https://freakk.love/", "fa-solid fa-blog", "My Blog"],
+    "link_2": ["https://github-wrapped4u.vercel.app/", "fa-solid fa-cloud", "GitHub Stats"],
+    "link_3": ["https://vusic.xxx.com/", "fa-solid fa-music", "Music Visualizer"],
+    "link_4": ["https://muse.xxx.com/", "fa-solid fa-book-bookmark", "English Assistant"],
+    "link_5": ["https://lifecalendar.xxx.com/", "fa-solid fa-calendar-days", "Life Calendar"],
+    "link_6": ["", "fa-solid fa-flask", "Coming Soon"]  // Leave empty to disable
+}
+```
+
+#### 5. Music Player Configuration
+```json
+{
+    "music_server": "netease",         // Music platform: netease, tencent, kugou, xiami, baidu
+    "music_type": "playlist",          // Type: playlist, song, album, artist
+    "music_id": "3778678",             // Corresponding ID (e.g., Netease playlist ID)
+    "music_api": "https://api.injahow.cn/meting/"  // Meting API (usually no need to change)
+}
+```
+
+**How to get playlist ID:**
+1. Open Netease Cloud Music web player
+2. Find your playlist, the number after `?id=` in the URL is the playlist ID
+
+#### 6. Guestbook Configuration (Giscus)
+```json
+{
+    "giscus": {
+        "repo": "Freakz3z/Freakk-Personal-Page",  // GitHub repo (format: username/repo)
+        "repoId": "R_kgDOQ_scEA",                 // Repository ID
+        "category": "General",                     // Discussion category
+        "categoryId": "DIC_kwDOQ_scEM4C1VBD"      // Category ID
+    }
+}
+```
+
+**How to get configuration:**
+1. Visit [Giscus configuration page](https://giscus.app/)
+2. Enter your repository information
+3. Copy the generated config to `setting.json`
+
+#### 7. GitHub README Display (New)
+```json
+{
+    "github_readme": {
+        "enabled": true,    // Enable or disable (true/false)
+        "url": "https://raw.githubusercontent.com/Freakz3z/Freakz3z/main/README.md"
+    }
+}
+```
+
+**URL Format:**
+- Must use `raw.githubusercontent.com` URL
+- Format: `https://raw.githubusercontent.com/username/repo/branch/README.md`
+- Supports all Markdown syntax, automatically parsed and rendered
+
+#### 8. Other System Settings
+```json
+{
+    "background_animation": true,  // Enable background animation (Sakura falling)
+    "beian": ""                    // ICP license number (optional, shown in footer)
+}
+```
+
+### Configuration Tips
+- After modifying config, refresh the page in dev mode to see changes
+- Remember to run `npm run build` before deployment
+- All icons use [FontAwesome 6 Free](https://fontawesome.com/search?o=r&m=free)
+- Music cover art and lyrics are automatically fetched from Meting API
 
 ## ☁️ Deployment
 

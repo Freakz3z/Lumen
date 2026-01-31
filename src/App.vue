@@ -139,7 +139,18 @@
                   <a class="link" id="message-board-btn" @click="showMessageBoard = true" style="cursor: pointer;" title="留言板">
                      <i class="fa-solid fa-comments"></i>
                   </a>
-                  
+
+                  <a
+                    v-if="config.github_readme && config.github_readme.enabled"
+                    class="link"
+                    id="about-me-btn"
+                    @click="showAboutMe = true"
+                    style="cursor: pointer;"
+                    title="关于我"
+                  >
+                    <i class="fa-solid fa-user"></i>
+                  </a>
+
                   <a id="link-text" class="link-text" :href="config.email ? 'mailto:' + config.email : 'javascript:;'">
                     通过这里联系我
                   </a>
@@ -441,6 +452,11 @@
          </div>
       </footer>
       <MessageBoard :show="showMessageBoard" :config="config.giscus" @close="showMessageBoard = false" />
+      <AboutMe
+        :show="showAboutMe"
+        :readme-url="config.github_readme ? config.github_readme.url : ''"
+        @close="showAboutMe = false"
+      />
     </section>
   </div>
 </template>
@@ -453,6 +469,7 @@ import Typed from "typed.js";
 import MessageBoard from "./components/MessageBoard.vue";
 import Background from "./components/Background.vue";
 import MusicPlayer from "./components/MusicPlayer.vue";
+import AboutMe from "./components/AboutMe.vue";
 import configData from "../setting.json";
 import { useTime } from "./composables/useTime";
 import { useWeather } from "./composables/useWeather";
@@ -466,6 +483,7 @@ const loadingText = computed(() => loadingState.value === 0 ? t('loading') : t('
 const showMore = ref(false);
 const showBox = ref(false);
 const showMessageBoard = ref(false);
+const showAboutMe = ref(false);
 const showMusic = ref(localStorage.getItem('music_open') === 'true');
 watch(showMusic, (val) => localStorage.setItem('music_open', val));
 const isHitokotoHover = ref(false);

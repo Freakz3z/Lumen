@@ -1,4 +1,6 @@
 /.vscode/*
+.vscode/
+.claude/
 node_modules/
 dist/
 build/
